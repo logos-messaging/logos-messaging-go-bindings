@@ -12,18 +12,10 @@ all: build
 
 # Prepare third_party directory and clone nwaku
 prepare:
-	@echo "Creating third_party directory..."
+	@echo "Fetching nwaku..."
 	@mkdir -p $(THIRD_PARTY_DIR)
-
-	@echo "Cloning nwaku repository..."
-	@if [ ! -d "$(NWAKU_DIR)" ]; then \
-		cd $(THIRD_PARTY_DIR) && \
-		git clone $(NWAKU_REPO) && \
-		cd $(NWAKU_DIR) && \
-		make update; \
-	else \
-		echo "nwaku repository already exists."; \
-	fi
+	cd .. && git submodule update --init --recursive
+	cd $(NWAKU_DIR) && make update
 
 # Build libwaku
 build-libwaku: prepare
