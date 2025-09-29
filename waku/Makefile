@@ -27,6 +27,7 @@ all: build
 # NOTE: Currently we download a library release.
 # 		In the future we should get nwaku from Nimble package manager.
 $(LIBWAKU) $(LIBWAKU_HEADER):
+	@chmod +x ../scripts/download_nwaku.sh
 	@../scripts/download_nwaku.sh
 
 libwaku: $(LIBWAKU) $(LIBWAKU_HEADER)
