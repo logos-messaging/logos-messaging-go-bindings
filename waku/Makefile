@@ -37,9 +37,6 @@ build-libwaku:
 	@cd $(NWAKU_DIR) && make libwaku
 
 # Build Waku Go Bindings
-
-build: export CGO_CFLAGS = "-I${NWAKU_DIR}"
-build: export CGO_LDFLAGS = "-L${NWAKU_DIR} -lwaku -L${NWAKU_DIR} -Wl,-rpath,${NWAKU_DIR}"
 build: libwaku
 	@echo "Building Waku Go Bindings..."
 	go build ./...

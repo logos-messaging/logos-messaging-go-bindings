@@ -1,7 +1,10 @@
 package waku
 
 /*
-	#include "libwaku.h"
+	#cgo LDFLAGS: -L../third_party/nwaku -lwaku
+	#cgo LDFLAGS: -L../third_party/nwaku -Wl,-rpath,../third_party/nwaku
+
+	#include "../third_party/nwaku/libwaku.h"
 	#include <stdio.h>
 	#include <stdlib.h>
 
