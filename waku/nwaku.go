@@ -1,7 +1,10 @@
 package waku
 
 /*
-	#include "libwaku.h"
+	#cgo LDFLAGS: -L../third_party/nwaku/build/ -lwaku
+	#cgo LDFLAGS: -L../third_party/nwaku -Wl,-rpath,../third_party/nwaku/build/
+
+	#include "../third_party/nwaku/library/libwaku.h"
 	#include <stdio.h>
 	#include <stdlib.h>
 
@@ -345,7 +348,6 @@ import (
 	"github.com/multiformats/go-multiaddr"
 	"github.com/waku-org/go-waku/waku/v2/protocol/pb"
 	"github.com/waku-org/go-waku/waku/v2/utils"
-
 	"github.com/waku-org/waku-go-bindings/waku/common"
 )
 
