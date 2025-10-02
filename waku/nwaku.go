@@ -1,10 +1,10 @@
 package waku
 
 /*
-	#cgo LDFLAGS: -L../third_party/nwaku/build/ -lwaku
-	#cgo LDFLAGS: -L../third_party/nwaku -Wl,-rpath,../third_party/nwaku/build/
+	#cgo LDFLAGS: -L../third-party/nwaku/build/ -lwaku
+	#cgo LDFLAGS: -L../third-party/nwaku -Wl,-rpath,../third-party/nwaku/build/
 
-	#include "../third_party/nwaku/library/libwaku.h"
+	#include "../third-party/nwaku/library/libwaku.h"
 	#include <stdio.h>
 	#include <stdlib.h>
 

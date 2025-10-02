@@ -1,7 +1,7 @@
 # Makefile for Waku Go Bindings
 
 # Directories
-THIRD_PARTY_DIR := ../third_party
+THIRD_PARTY_DIR := ../third-party
 NWAKU_REPO := https://github.com/waku-org/nwaku
 NWAKU_DIR := $(THIRD_PARTY_DIR)/nwaku
 
@@ -12,13 +12,8 @@ all: build
 
 # Prepare third_party directory and clone nwaku
 prepare:
-	@echo "Creating third_party directory..."
-	@mkdir -p $(THIRD_PARTY_DIR)
-
 	@echo "Cloning nwaku repository..."
 	@if [ ! -d "$(NWAKU_DIR)" ]; then \
-		cd $(THIRD_PARTY_DIR) && \
-		git clone $(NWAKU_REPO) && \
 		cd $(NWAKU_DIR) && \
 		make update; \
 	else \
