@@ -1,6 +1,7 @@
 # Waku Go Bindings
 
 This repository provides Go bindings for the Waku library, enabling seamless integration with Go projects.
+The third-party folder cannot be edited manually. It is built by git subtree from nwaku.
 
 ## Installation
 
