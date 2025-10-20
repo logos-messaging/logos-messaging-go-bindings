@@ -1,6 +1,8 @@
 package waku
 
 /*
+	#cgo CFLAGS: -I${NWAKU_INCLUDE_DIR}
+	#cgo LDFLAGS: -L${NWAKU_LIB_DIR} -lnwaku -Wl,-rpath,${NWAKU_LIB_DIR}
 	#include "libwaku.h"
 	#include <stdio.h>
 	#include <stdlib.h>

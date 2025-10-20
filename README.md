@@ -19,21 +19,21 @@ To do so, you can:
 Example environment setup (adjust paths to your nwaku checkout):
 ```
 export NWAKU_DIR=/path/to/nwaku
-export CGO_CFLAGS="-I${NWAKU_DIR}/library"
-export CGO_LDFLAGS="-L${NWAKU_DIR}/build -lwaku -Wl,-rpath,${NWAKU_DIR}/build"
+export NWAKU_INCLUDE_DIR="{NWAKU_DIR}/library"
+export NWAKU_LIB_DIR="${NWAKU_DIR}/build"
 ```
 
 Such setup would look like this in a `Makefile`:
 ```Makefile
 NWAKU_DIR ?= /path/to/nwaku
-CGO_CFLAGS = -I$(NWAKU_DIR)/library
-CGO_LDFLAGS = -L$(NWAKU_DIR)/build -lwaku -Wl,-rpath,$(NWAKU_DIR)/build
 
+build: NWAKU_INCLUDE_DIR ?= $(NWAKU_DIR)/library
+build: NWAKU_LIB_DIR ?= $(NWAKU_DIR)/build 
 build: ## Your project build command
 	go build ./...
 ```
 
-For a reference integration, see how `status-go` wires `CGO_CFLAGS` and `CGO_LDFLAGS` in its build setup.
+For a reference integration, see how `status-go` wires `NWAKU_INCLUDE_DIR` and `NWAKU_LIB_DIR` in its build setup.
 
 NOTE: If your project is itself used as a Go dependency, all its clients will have to follow the same nwaku setup. 
 
