@@ -79,14 +79,15 @@ func TestStressStoreQuery5kMessagesWithPagination(t *testing.T) {
 	require.NoError(t, err, "Failed to start Waku node")
 	node2.ConnectPeer(wakuNode)
 
+	time.Sleep(200 * time.Millisecond)
+
 	defer func() {
 		Debug("Stopping and destroying Waku node")
 		wakuNode.StopAndDestroy()
 		node2.StopAndDestroy()
 	}()
 
-	
-	iterations := 1000
+	iterations := 2500
 
 	captureMemory(t.Name(), "at start")
 
@@ -95,8 +96,13 @@ func TestStressStoreQuery5kMessagesWithPagination(t *testing.T) {
 	for i := 0; i < iterations; i++ {
 		message := wakuNode.CreateMessage()
 		message.Payload = []byte(fmt.Sprintf("Test endurance message payload %d", i))
-		_, err := wakuNode.RelayPublishNoCTX(DefaultPubsubTopic, message)
+		hash, err := wakuNode.RelayPublishNoCTX(DefaultPubsubTopic, message)
 		require.NoError(t, err, "Failed to publish message")
+
+    err = node2.VerifyMessageReceived(message, hash)
+		require.NoError(t, err, "node2 failed to receive message %d", i)
+    err = wakuNode.VerifyMessageReceived(message, hash)
+		require.NoError(t, err, "wakuNode failed to receive message %d", i)
 
 		if i%10 == 0 {
 
