@@ -99,9 +99,9 @@ func TestStressStoreQuery5kMessagesWithPagination(t *testing.T) {
 		hash, err := wakuNode.RelayPublishNoCTX(DefaultPubsubTopic, message)
 		require.NoError(t, err, "Failed to publish message")
 
-    err = node2.VerifyMessageReceived(message, hash)
+		err = node2.VerifyMessageReceived(message, hash)
 		require.NoError(t, err, "node2 failed to receive message %d", i)
-    err = wakuNode.VerifyMessageReceived(message, hash)
+		err = wakuNode.VerifyMessageReceived(message, hash)
 		require.NoError(t, err, "wakuNode failed to receive message %d", i)
 
 		if i%10 == 0 {
