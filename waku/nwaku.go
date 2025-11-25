@@ -338,6 +338,8 @@ import (
 	"time"
 	"unsafe"
 
+	"github.com/waku-org/waku-go-bindings/waku/timesource"
+
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/p2p/enode"
 	"github.com/libp2p/go-libp2p/core/peer"
@@ -374,6 +376,7 @@ type WakuNode struct {
 	TopicHealthChan      chan topicHealth
 	ConnectionChangeChan chan connectionChange
 	nodeName             string
+	_                    timesource.Timesource
 }
 
 func NewWakuNode(config *common.WakuConfig, nodeName string) (*WakuNode, error) {
