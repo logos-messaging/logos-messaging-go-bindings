@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/logos-messaging/logos-messaging-go-bindings/waku/common"
 	"github.com/stretchr/testify/require"
-	"github.com/waku-org/waku-go-bindings/waku/common"
 
 	//	"go.uber.org/zap/zapcore"
 	"google.golang.org/protobuf/proto"
@@ -107,9 +107,9 @@ func TestStressStoreQuery5kMessagesWithPagination(t *testing.T) {
 		if i%10 == 0 {
 
 			storeQueryRequest := &common.StoreQueryRequest{
-				TimeStart:       queryTimestamp,
-				IncludeData:     true,
-				PaginationLimit: proto.Uint64(50),
+				TimeStart:         queryTimestamp,
+				IncludeData:       true,
+				PaginationLimit:   proto.Uint64(50),
 				PaginationForward: false,
 			}
 
@@ -117,7 +117,7 @@ func TestStressStoreQuery5kMessagesWithPagination(t *testing.T) {
 			require.NoError(t, err, "Failed to query store messages")
 			require.Greater(t, len(*storedmsgs.Messages), 0, "Expected at least one stored message")
 		}
-		Debug("##Iteration #%d",i)
+		Debug("##Iteration #%d", i)
 	}
 
 	captureMemory(t.Name(), "at end")
@@ -144,8 +144,8 @@ func TestStressHighThroughput10kPublish(t *testing.T) {
 
 	captureMemory(t.Name(), "at start")
 
-	const totalMessages = 1000        
-	var pubsubTopic  = DefaultPubsubTopic
+	const totalMessages = 1000
+	var pubsubTopic = DefaultPubsubTopic
 
 	for i := 0; i < totalMessages; i++ {
 		msg := node1.CreateMessage()
@@ -153,16 +153,14 @@ func TestStressHighThroughput10kPublish(t *testing.T) {
 
 		hash, err := node1.RelayPublishNoCTX(pubsubTopic, msg)
 		require.NoError(t, err, "publish failed @%d", i)
-        Debug("Iteration-10kpublish #%d",i)
-		err = node2.VerifyMessageReceived(msg, hash )
+		Debug("Iteration-10kpublish #%d", i)
+		err = node2.VerifyMessageReceived(msg, hash)
 		require.NoError(t, err, "verification failed @%d", i)
-
 
 	}
 
 	captureMemory(t.Name(), "at end")
 }
-
 
 func TestStressConnectDisconnect1kIteration(t *testing.T) {
 	captureMemory(t.Name(), "at start")
@@ -342,7 +340,7 @@ func TestStressLargePayloadEphemeralMessagesEndurance(t *testing.T) {
 func TestStress2Nodes2kIterationTearDown(t *testing.T) {
 
 	captureMemory(t.Name(), "at start")
-	var err error    
+	var err error
 	totalIterations := 2000
 	for i := 1; i <= totalIterations; i++ {
 		var nodes []*WakuNode

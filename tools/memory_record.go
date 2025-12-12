@@ -6,7 +6,7 @@ import (
 	"os"
 	"runtime"
 
-	"github.com/waku-org/waku-go-bindings/utils"
+	"github.com/logos-messaging/logos-messaging-go-bindings/utils"
 )
 
 var (

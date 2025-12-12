@@ -16,9 +16,9 @@ import (
 
 	"github.com/cenkalti/backoff/v3"
 	"github.com/libp2p/go-libp2p/core/peer"
+	"github.com/logos-messaging/logos-messaging-go-bindings/utils"
+	"github.com/logos-messaging/logos-messaging-go-bindings/waku/common"
 	"github.com/waku-org/go-waku/waku/v2/protocol/pb"
-	"github.com/waku-org/waku-go-bindings/utils"
-	"github.com/waku-org/waku-go-bindings/waku/common"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -296,7 +296,7 @@ func captureMemory(testName, phase string) {
 	runtime.ReadMemStats(&ms)
 
 	heapKB := ms.HeapAlloc / 1024
-	rssKB, _ := utils.GetRSSKB() 
+	rssKB, _ := utils.GetRSSKB()
 
 	Debug("[%s] Memory usage  (%s): %d KB (RSS %d KB)", testName, phase, heapKB, rssKB)
 

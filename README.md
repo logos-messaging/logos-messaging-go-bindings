@@ -5,7 +5,7 @@ Go bindings for the Waku library.
 ## Install
 
 ```
-go get -u github.com/waku-org/waku-go-bindings
+go get -u github.com/logos-messaging/logos-messaging-go-bindings
 ```
 
 ## Dependencies
