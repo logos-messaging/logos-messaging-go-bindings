@@ -55,32 +55,32 @@ package waku
 
 	static void* cGoWakuNew(const char* configJson, void* resp) {
 		// We pass NULL because we are not interested in retrieving data from this callback
-		void* ret = waku_new(configJson, (WakuCallBack) WakuGoCallback, resp);
+		void* ret = waku_new(configJson, (FFICallBack) WakuGoCallback, resp);
 		return ret;
 	}
 
 	static void cGoWakuStart(void* wakuCtx, void* resp) {
-		waku_start(wakuCtx, (WakuCallBack) WakuGoCallback, resp);
+		waku_start(wakuCtx, (FFICallBack) WakuGoCallback, resp);
 	}
 
 	static void cGoWakuStop(void* wakuCtx, void* resp) {
-		waku_stop(wakuCtx, (WakuCallBack) WakuGoCallback, resp);
+		waku_stop(wakuCtx, (FFICallBack) WakuGoCallback, resp);
 	}
 
 	static void cGoWakuDestroy(void* wakuCtx, void* resp) {
-		waku_destroy(wakuCtx, (WakuCallBack) WakuGoCallback, resp);
+		waku_destroy(wakuCtx, (FFICallBack) WakuGoCallback, resp);
 	}
 
 	static void cGoWakuStartDiscV5(void* wakuCtx, void* resp) {
-		waku_start_discv5(wakuCtx, (WakuCallBack) WakuGoCallback, resp);
+		waku_start_discv5(wakuCtx, (FFICallBack) WakuGoCallback, resp);
 	}
 
 	static void cGoWakuStopDiscV5(void* wakuCtx, void* resp) {
-		waku_stop_discv5(wakuCtx, (WakuCallBack) WakuGoCallback, resp);
+		waku_stop_discv5(wakuCtx, (FFICallBack) WakuGoCallback, resp);
 	}
 
 	static void cGoWakuVersion(void* wakuCtx, void* resp) {
-		waku_version(wakuCtx, (WakuCallBack) WakuGoCallback, resp);
+		waku_version(wakuCtx, (FFICallBack) WakuGoCallback, resp);
 	}
 
 	static void cGoWakuSetEventCallback(void* wakuCtx) {
@@ -96,7 +96,7 @@ package waku
 
 		// This technique is needed because cgo only allows to export Go functions and not methods.
 
-		waku_set_event_callback(wakuCtx, (WakuCallBack) wakuGlobalEventCallback, wakuCtx);
+		set_event_callback(wakuCtx, (FFICallBack) wakuGlobalEventCallback, wakuCtx);
 	}
 
 	static void cGoWakuContentTopic(void* wakuCtx,
@@ -107,20 +107,21 @@ package waku
 							void* resp) {
 
 		waku_content_topic(wakuCtx,
+							(FFICallBack) WakuGoCallback,
+							resp,
 							appName,
 							appVersion,
 							contentTopicName,
-							encoding,
-							(WakuCallBack) WakuGoCallback,
-							resp);
+							encoding
+							);
 	}
 
 	static void cGoWakuPubsubTopic(void* wakuCtx, char* topicName, void* resp) {
-		waku_pubsub_topic(wakuCtx, topicName, (WakuCallBack) WakuGoCallback, resp);
+		waku_pubsub_topic(wakuCtx, (FFICallBack) WakuGoCallback, resp, topicName);
 	}
 
 	static void cGoWakuDefaultPubsubTopic(void* wakuCtx, void* resp) {
-		waku_default_pubsub_topic(wakuCtx, (WakuCallBack) WakuGoCallback, resp);
+		waku_default_pubsub_topic(wakuCtx, (FFICallBack) WakuGoCallback, resp);
 	}
 
 	static void cGoWakuRelayPublish(void* wakuCtx,
@@ -130,43 +131,48 @@ package waku
 					   void* resp) {
 
 		waku_relay_publish(wakuCtx,
+                       (FFICallBack) WakuGoCallback,
+                       resp,
                        pubSubTopic,
                        jsonWakuMessage,
-                       timeoutMs,
-                       (WakuCallBack) WakuGoCallback,
-                       resp);
+                       timeoutMs
+                       );
 	}
 
 	static void cGoWakuRelaySubscribe(void* wakuCtx, char* pubSubTopic, void* resp) {
 		waku_relay_subscribe(wakuCtx,
-							pubSubTopic,
-							(WakuCallBack) WakuGoCallback,
-							resp);
+							(FFICallBack) WakuGoCallback,
+							resp,
+							pubSubTopic
+							);
 	}
 
 	static void cGoWakuRelayAddProtectedShard(void* wakuCtx, int clusterId, int shardId, char* publicKey, void* resp) {
 		waku_relay_add_protected_shard(wakuCtx,
+							(FFICallBack) WakuGoCallback,
+							resp,
 							clusterId,
 							shardId,
-							publicKey,
-							(WakuCallBack) WakuGoCallback,
-							resp);
+							publicKey
+							);
 	}
 
 	static void cGoWakuRelayUnsubscribe(void* wakuCtx, char* pubSubTopic, void* resp) {
 
 		waku_relay_unsubscribe(wakuCtx,
-							pubSubTopic,
-							(WakuCallBack) WakuGoCallback,
-							resp);
+							(FFICallBack) WakuGoCallback,
+							resp,
+							pubSubTopic
+							);
 	}
 
 	static void cGoWakuConnect(void* wakuCtx, char* peerMultiAddr, int timeoutMs, void* resp) {
 		waku_connect(wakuCtx,
+						(FFICallBack) WakuGoCallback,
+						resp,
 						peerMultiAddr,
-						timeoutMs,
-						(WakuCallBack) WakuGoCallback,
-						resp);
+						timeoutMs
+						);
 	}
 
 	static void cGoWakuDialPeer(void* wakuCtx,
@@ -176,11 +182,12 @@ package waku
 									void* resp) {
 
 		waku_dial_peer(wakuCtx,
+						(FFICallBack) WakuGoCallback,
+						resp,
 						peerMultiAddr,
 						protocol,
-						timeoutMs,
-						(WakuCallBack) WakuGoCallback,
-						resp);
+						timeoutMs
+						);
 	}
 
 	static void cGoWakuDialPeerById(void* wakuCtx,
@@ -190,68 +197,70 @@ package waku
 									void* resp) {
 
 		waku_dial_peer_by_id(wakuCtx,
+						(FFICallBack) WakuGoCallback,
+						resp,
 						peerId,
 						protocol,
-						timeoutMs,
-						(WakuCallBack) WakuGoCallback,
-						resp);
+						timeoutMs
+						);
 	}
 
 	static void cGoWakuDisconnectPeerById(void* wakuCtx, char* peerId, void* resp) {
 		waku_disconnect_peer_by_id(wakuCtx,
-						peerId,
-						(WakuCallBack) WakuGoCallback,
-						resp);
+						(FFICallBack) WakuGoCallback,
+						resp,
+						peerId
+						);
 	}
 
 	static void cGoWakuDisconnectAllPeers(void* wakuCtx, void* resp) {
 		waku_disconnect_all_peers(wakuCtx,
-						(WakuCallBack) WakuGoCallback,
+						(FFICallBack) WakuGoCallback,
 						resp);
 	}
 
 	static void cGoWakuListenAddresses(void* wakuCtx, void* resp) {
-		waku_listen_addresses(wakuCtx, (WakuCallBack) WakuGoCallback, resp);
+		waku_listen_addresses(wakuCtx, (FFICallBack) WakuGoCallback, resp);
 	}
 
 	static void cGoWakuGetMyENR(void* ctx, void* resp) {
-		waku_get_my_enr(ctx, (WakuCallBack) WakuGoCallback, resp);
+		waku_get_my_enr(ctx, (FFICallBack) WakuGoCallback, resp);
 	}
 
 	static void cGoWakuGetMyPeerId(void* ctx, void* resp) {
-		waku_get_my_peerid(ctx, (WakuCallBack) WakuGoCallback, resp);
+		waku_get_my_peerid(ctx, (FFICallBack) WakuGoCallback, resp);
 	}
 
 	static void cGoWakuPingPeer(void* ctx, char* peerAddr, int timeoutMs, void* resp) {
-		waku_ping_peer(ctx, peerAddr, timeoutMs, (WakuCallBack) WakuGoCallback, resp);
+		waku_ping_peer(ctx, (FFICallBack) WakuGoCallback, resp, peerAddr, timeoutMs);
 	}
 
 	static void cGoWakuGetPeersInMesh(void* ctx, char* pubSubTopic, void* resp) {
-		waku_relay_get_peers_in_mesh(ctx, pubSubTopic, (WakuCallBack) WakuGoCallback, resp);
+		waku_relay_get_peers_in_mesh(ctx, (FFICallBack) WakuGoCallback, resp, pubSubTopic);
 	}
 
 	static void cGoWakuGetNumPeersInMesh(void* ctx, char* pubSubTopic, void* resp) {
-		waku_relay_get_num_peers_in_mesh(ctx, pubSubTopic, (WakuCallBack) WakuGoCallback, resp);
+		waku_relay_get_num_peers_in_mesh(ctx, (FFICallBack) WakuGoCallback, resp, pubSubTopic);
 	}
 
 	static void cGoWakuGetNumConnectedRelayPeers(void* ctx, char* pubSubTopic, void* resp) {
-		waku_relay_get_num_connected_peers(ctx, pubSubTopic, (WakuCallBack) WakuGoCallback, resp);
+		waku_relay_get_num_connected_peers(ctx, (FFICallBack) WakuGoCallback, resp, pubSubTopic);
 	}
 
 	static void cGoWakuGetConnectedRelayPeers(void* ctx, char* pubSubTopic, void* resp) {
-		waku_relay_get_connected_peers(ctx, pubSubTopic, (WakuCallBack) WakuGoCallback, resp);
+		waku_relay_get_connected_peers(ctx, (FFICallBack) WakuGoCallback, resp, pubSubTopic);
 	}
 
 	static void cGoWakuGetConnectedPeers(void* wakuCtx, void* resp) {
-		waku_get_connected_peers(wakuCtx, (WakuCallBack) WakuGoCallback, resp);
+		waku_get_connected_peers(wakuCtx, (FFICallBack) WakuGoCallback, resp);
 	}
 
 	static void cGoWakuGetPeerIdsFromPeerStore(void* wakuCtx, void* resp) {
-		waku_get_peerids_from_peerstore(wakuCtx, (WakuCallBack) WakuGoCallback, resp);
+		waku_get_peerids_from_peerstore(wakuCtx, (FFICallBack) WakuGoCallback, resp);
 	}
 
 	static void cGoWakuGetConnectedPeersInfo(void* wakuCtx, void* resp) {
-		waku_get_connected_peers_info(wakuCtx, (WakuCallBack) WakuGoCallback, resp);
+		waku_get_connected_peers_info(wakuCtx, (FFICallBack) WakuGoCallback, resp);
 	}
 
 	static void cGoWakuLightpushPublish(void* wakuCtx,
@@ -260,10 +269,11 @@ package waku
 					void* resp) {
 
 		waku_lightpush_publish(wakuCtx,
+						(FFICallBack) WakuGoCallback,
+						resp,
 						pubSubTopic,
-						jsonWakuMessage,
-						(WakuCallBack) WakuGoCallback,
-						resp);
+						jsonWakuMessage
+						);
 	}
 
 	static void cGoWakuStoreQuery(void* wakuCtx,
@@ -273,11 +283,12 @@ package waku
 					void* resp) {
 
 		waku_store_query(wakuCtx,
+					(FFICallBack) WakuGoCallback,
+					resp,
 					jsonQuery,
 					peerAddr,
-					timeoutMs,
-					(WakuCallBack) WakuGoCallback,
-					resp);
+					timeoutMs
+					);
 	}
 
 	static void cGoWakuPeerExchangeQuery(void* wakuCtx,
@@ -285,9 +296,10 @@ package waku
 								void* resp) {
 
 		waku_peer_exchange_request(wakuCtx,
-									numPeers,
-									(WakuCallBack) WakuGoCallback,
-									resp);
+									(FFICallBack) WakuGoCallback,
+									resp,
+									numPeers
+									);
 	}
 
 	static void cGoWakuGetPeerIdsByProtocol(void* wakuCtx,
@@ -295,9 +307,10 @@ package waku
 									 void* resp) {
 
 		waku_get_peerids_by_protocol(wakuCtx,
-									protocol,
-									(WakuCallBack) WakuGoCallback,
-									resp);
+									(FFICallBack) WakuGoCallback,
+									resp,
+									protocol
+									);
 	}
 
 	static void cGoWakuDnsDiscovery(void* wakuCtx,
@@ -307,19 +320,20 @@ package waku
 									 void* resp) {
 
 		waku_dns_discovery(wakuCtx,
+							(FFICallBack) WakuGoCallback,
+							resp,
 							entTreeUrl,
 							nameDnsServer,
-							timeoutMs,
-							(WakuCallBack) WakuGoCallback,
-							resp);
+							timeoutMs
+							);
 	}
 
 	static void cGoWakuIsOnline(void* wakuCtx, void* resp) {
-		waku_is_online(wakuCtx, (WakuCallBack) WakuGoCallback, resp);
+		waku_is_online(wakuCtx, (FFICallBack) WakuGoCallback, resp);
 	}
 
 	static void cGoWakuGetMetrics(void* wakuCtx, void* resp) {
-		waku_get_metrics(wakuCtx, (WakuCallBack) WakuGoCallback, resp);
+		waku_get_metrics(wakuCtx, (FFICallBack) WakuGoCallback, resp);
 	}
 
 */
