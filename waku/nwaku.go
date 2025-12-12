@@ -352,7 +352,7 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/waku-org/waku-go-bindings/waku/timesource"
+	"github.com/logos-messaging/logos-messaging-go-bindings/waku/timesource"
 
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/p2p/enode"
