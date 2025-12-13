@@ -31,7 +31,7 @@ jobs:
       - name: Install Go dependencies
         run: go mod download
 
-      - name: Build nwaku dependencies
+      - name: Build logos-messaging-nim dependencies
         run: make -C waku
 
       - name: Increase ulimit

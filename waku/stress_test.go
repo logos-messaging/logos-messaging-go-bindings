@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/require"
-	"github.com/waku-org/waku-go-bindings/waku/common"
+	"github.com/logos-co/logos-messaging-go-bindings/waku/common"
 
 	//	"go.uber.org/zap/zapcore"
 	"google.golang.org/protobuf/proto"

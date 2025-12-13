@@ -1,4 +1,4 @@
-module github.com/waku-org/waku-go-bindings
+module github.com/logos-co/logos-messaging-go-bindings
 
 go 1.21
 

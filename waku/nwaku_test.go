@@ -17,10 +17,10 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/waku-org/go-waku/waku/v2/protocol/pb"
 	"github.com/waku-org/go-waku/waku/v2/protocol/store"
-	"github.com/waku-org/waku-go-bindings/waku/common"
+	"github.com/logos-messaging/logos-messaging-go-bindings/waku/common"
 )
 
-// In order to run this test, you must run an nwaku node
+// In order to run this test, you must run a logos-messaging-nim node
 //
 // Using Docker:
 //

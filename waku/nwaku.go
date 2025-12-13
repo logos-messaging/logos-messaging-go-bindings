@@ -346,7 +346,7 @@ import (
 	"github.com/waku-org/go-waku/waku/v2/protocol/pb"
 	"github.com/waku-org/go-waku/waku/v2/utils"
 
-	"github.com/waku-org/waku-go-bindings/waku/common"
+	"github.com/logos-co/logos-messaging-go-bindings/waku/common"
 )
 
 const requestTimeout = 30 * time.Second
@@ -366,7 +366,7 @@ func WakuGoCallback(ret C.int, msg *C.char, len C.size_t, resp unsafe.Pointer) {
 	}
 }
 
-// WakuNode represents an instance of an nwaku node
+// WakuNode represents an instance of a logos-messaging-nim node
 type WakuNode struct {
 	wakuCtx              unsafe.Pointer
 	config               *common.WakuConfig
@@ -476,7 +476,7 @@ func (n *WakuNode) OnEvent(eventStr string) {
 	jsonEvent := jsonEvent{}
 	err := json.Unmarshal([]byte(eventStr), &jsonEvent)
 	if err != nil {
-		Error("could not unmarshal nwaku event string: %v", err)
+		Error("could not unmarshal logos-messaging-nim event string: %v", err)
 
 		return
 	}

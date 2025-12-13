@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/require"
-	"github.com/waku-org/waku-go-bindings/waku/common"
+	"github.com/logos-co/logos-messaging-go-bindings/waku/common"
 )
 
 func TestBasicWakuNodes(t *testing.T) {
@@ -29,7 +29,7 @@ func TestBasicWakuNodes(t *testing.T) {
 	Debug("TestBasicWakuNodes completed successfully")
 }
 
-/* artifact https://github.com/waku-org/waku-go-bindings/issues/40 */
+/* artifact https://github.com/logos-co/logos-messaging-go-bindings/issues/40 */
 func TestNodeRestart(t *testing.T) {
 	t.Skip("Skipping test for open artifact ")
 	Debug("Starting TestNodeRestart")
