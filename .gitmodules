@@ -1,3 +1,3 @@
 [submodule "third_party/logos-messaging-nim"]
 	path = third_party/logos-messaging-nim
-	url = https://github.com/logos-co/logos-messaging-nim.git
+	url = https://github.com/logos-messaging/logos-messaging-nim

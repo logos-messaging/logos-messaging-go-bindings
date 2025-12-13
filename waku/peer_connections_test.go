@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/require"
-	"github.com/logos-co/logos-messaging-go-bindings/waku/common"
+	"github.com/logos-messaging/logos-messaging-go-bindings/waku/common"
 )
 
 // Test node connect & disconnect peers

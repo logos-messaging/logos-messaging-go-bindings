@@ -17,8 +17,8 @@ import (
 	"github.com/cenkalti/backoff/v3"
 	"github.com/libp2p/go-libp2p/core/peer"
 	"github.com/waku-org/go-waku/waku/v2/protocol/pb"
-	"github.com/logos-co/logos-messaging-go-bindings/utils"
-	"github.com/logos-co/logos-messaging-go-bindings/waku/common"
+	"github.com/logos-messaging/logos-messaging-go-bindings/utils"
+	"github.com/logos-messaging/logos-messaging-go-bindings/waku/common"
 	"google.golang.org/protobuf/proto"
 )
 

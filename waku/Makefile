@@ -2,8 +2,8 @@
 
 # Directories
 THIRD_PARTY_DIR := $(shell pwd)/../third_party
-LOGOS_MESSAGING_NIM_REPO := https://github.com/logos-co/logos-messaging-nim
-LOGOS_MESSAGING_NIM_DIR := $(THIRD_PARTY_DIR)/logos-messaging-nim
+LMN_REPO := https://github.com/logos-messaging/logos-messaging-nim
+LMN_DIR := $(THIRD_PARTY_DIR)/logos-messaging-nim
 
 .PHONY: all clean build-libwaku build
 
@@ -13,12 +13,12 @@ all: build
 # Build libwaku
 build-libwaku:
 	@echo "Building libwaku..."
-	@cd $(LOGOS_MESSAGING_NIM_DIR) && make libwaku
+	@cd $(LMN_DIR) && make libwaku
 
 # Build Logos Messaging Go Bindings
 
-build: export CGO_CFLAGS = "-I${LOGOS_MESSAGING_NIM_DIR}/library/"
-build: export CGO_LDFLAGS = "-L${LOGOS_MESSAGING_NIM_DIR}/build/ -lwaku -L${LOGOS_MESSAGING_NIM_DIR} -Wl,-rpath,${LOGOS_MESSAGING_NIM_DIR}/build/"
+build: export CGO_CFLAGS = "-I${LMN_DIR}/library/"
+build: export CGO_LDFLAGS = "-L${LMN_DIR}/build/ -lwaku -L${LMN_DIR} -Wl,-rpath,${LMN_DIR}/build/"
 build:
 	@echo "Building Logos Messaging Go Bindings..."
 	go build ./...

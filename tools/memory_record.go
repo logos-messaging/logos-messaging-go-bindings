@@ -6,7 +6,7 @@ import (
 	"os"
 	"runtime"
 
-	"github.com/logos-co/logos-messaging-go-bindings/utils"
+	"github.com/logos-messaging/logos-messaging-go-bindings/utils"
 )
 
 var (

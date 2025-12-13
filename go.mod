@@ -1,4 +1,4 @@
-module github.com/logos-co/logos-messaging-go-bindings
+module github.com/logos-messaging/logos-messaging-go-bindings
 
 go 1.21
 
