@@ -18,6 +18,8 @@ replace github.com/mutecomm/go-sqlcipher/v4 v4.4.2 => github.com/status-im/go-sq
 
 replace github.com/libp2p/go-libp2p-pubsub v0.12.0 => github.com/logos-messaging/go-libp2p-pubsub v0.12.0-gowaku.0.20240823143342-b0f2429ca27f
 
+replace github.com/logos-messaging/go-discover => github.com/waku-org/go-discover v0.0.0-20240506173252-4912704efdc5
+
 require (
 	github.com/beevik/ntp v0.3.0 // indirect
 	github.com/cenkalti/backoff/v3 v3.2.2
