@@ -1,15 +1,20 @@
 # Makefile for Waku Go Bindings
 
-# The LIBWAKU_LIB_PATH and LIBWAKU_HEADER_PATH env vars should be defined beforehand
-# Therefore, we assume the libwaku library and headers are located in the specified paths
-export CGO_CFLAGS="-I${LIBWAKU_HEADER_PATH}/"
-export CGO_LDFLAGS="-L${LIBWAKU_LIB_PATH}/ -lsds -Wl,-rpath,${LIBWAKU_LIB_PATH}/"
+# Path to logos-messaging-nim (nwaku) submodule
+NWAKU_DIR ?= $(shell pwd)/../third_party/nwaku
+
+# Default paths for libwaku library and headers (can be overridden)
+LIBWAKU_HEADER_PATH ?= $(NWAKU_DIR)/library
+LIBWAKU_LIB_PATH ?= $(NWAKU_DIR)/build
+
+export CGO_CFLAGS := -I$(LIBWAKU_HEADER_PATH)/
+export CGO_LDFLAGS := -L$(LIBWAKU_LIB_PATH)/ -lwaku -Wl,-rpath,$(LIBWAKU_LIB_PATH)/
 
 # Expected files
 HEADER_FILE := $(LIBWAKU_HEADER_PATH)/libwaku.h
 LIB_FILES   := $(wildcard $(LIBWAKU_LIB_PATH)/libwaku.*)
 
-.PHONY: all clean prepare build
+.PHONY: all clean prepare build build-libwaku
 
 # Default target
 all: build
@@ -46,6 +51,16 @@ check-folders:
 build: check-folders
 	@echo "Building Waku Go Bindings..."
 	go build ./...
+
+# Build libwaku from the nwaku submodule
+build-libwaku:
+	@echo "Building libwaku from nwaku submodule..."
+	@if [ ! -d "$(NWAKU_DIR)" ]; then \
+		echo "ERROR: nwaku submodule not found at $(NWAKU_DIR)"; \
+		echo "Run 'git submodule update --init --recursive' first"; \
+		exit 1; \
+	fi
+	$(MAKE) -C $(NWAKU_DIR) libwaku
 
 # Clean up generated files
 clean:

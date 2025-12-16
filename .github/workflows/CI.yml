@@ -31,8 +31,11 @@ jobs:
       - name: Install Go dependencies
         run: go mod download
 
-      - name: Build nwaku dependencies
-        run: make -C waku
+      - name: Build libwaku from submodule
+        run: make -C waku build-libwaku
+
+      - name: Build waku bindings
+        run: make -C waku build
 
       - name: Increase ulimit
         run: sudo sh -c "ulimit -n 8192"  

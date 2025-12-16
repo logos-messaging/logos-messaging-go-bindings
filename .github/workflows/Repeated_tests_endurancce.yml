@@ -30,8 +30,11 @@ jobs:
       - name: Install Go dependencies
         run: go mod download
 
-      - name: Build dependencies
-        run: make -C waku
+      - name: Build libwaku from submodule
+        run: make -C waku build-libwaku
+
+      - name: Build waku bindings
+        run: make -C waku build
 
       - name: Clean environment
         run: go clean -cache
