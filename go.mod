@@ -16,7 +16,7 @@ replace github.com/forPelevin/gomoji => github.com/status-im/gomoji v1.1.3-0.202
 
 replace github.com/mutecomm/go-sqlcipher/v4 v4.4.2 => github.com/status-im/go-sqlcipher/v4 v4.5.4-status.3
 
-replace github.com/libp2p/go-libp2p-pubsub v0.12.0 => github.com/waku-org/go-libp2p-pubsub v0.12.0-gowaku.0.20240823143342-b0f2429ca27f
+replace github.com/libp2p/go-libp2p-pubsub v0.12.0 => github.com/logos-messaging/go-libp2p-pubsub v0.12.0-gowaku.0.20240823143342-b0f2429ca27f
 
 require (
 	github.com/beevik/ntp v0.3.0 // indirect
@@ -38,7 +38,7 @@ require (
 	google.golang.org/protobuf v1.34.2
 )
 
-require github.com/waku-org/go-waku v0.8.1-0.20241028194639-dd82c24e0057
+require github.com/logos-messaging/logos-messaging-go v0.8.1-0.20241028194639-dd82c24e0057
 
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -73,7 +73,7 @@ require (
 	github.com/prometheus/common v0.55.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
-	github.com/waku-org/go-discover v0.0.0-20240506173252-4912704efdc5 // indirect
+	github.com/logos-messaging/go-discover v0.0.0-20240506173252-4912704efdc5 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/exp v0.0.0-20240808152545-0cdaa3abc0fa // indirect
 	golang.org/x/net v0.28.0 // indirect
