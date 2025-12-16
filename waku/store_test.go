@@ -7,7 +7,7 @@ import (
 
 	"github.com/cenkalti/backoff/v3"
 	"github.com/stretchr/testify/require"
-	"github.com/logos-messaging/logos-messaging-go/waku/v2/protocol/pb"
+	"github.com/waku-org/go-waku/waku/v2/protocol/pb"
 
 	"github.com/logos-messaging/logos-messaging-go-bindings/waku/common"
 	"google.golang.org/protobuf/proto"

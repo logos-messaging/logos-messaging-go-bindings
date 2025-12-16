@@ -40,7 +40,7 @@ require (
 	google.golang.org/protobuf v1.34.2
 )
 
-require github.com/logos-messaging/logos-messaging-go v0.8.1-0.20241028194639-dd82c24e0057
+require github.com/waku-org/go-waku v0.8.1-0.20241028194639-dd82c24e0057
 
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
