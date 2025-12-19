@@ -48,19 +48,25 @@ check-folders:
 	fi
 
 # Build SDS Go Bindings
-build: build-libwaku check-folders
+build: build-libwaku
 	@echo "Building Waku Go Bindings..."
 	go build ./...
 
 # Build libwaku from the nwaku submodule
+# Build libwaku once (clone if needed). Skips work when headers & libs already exist.
 build-libwaku:
-	@echo "Building libwaku from logos-messaging-nim submodule..."
-	@if [ ! -d "$(LMN_DIR)" ]; then \
-		echo "nwaku sources not found at $(LMN_DIR), cloning shallow copy..."; \
-		mkdir -p $(dir $(LMN_DIR)); \
-		git clone --depth 1 https://github.com/logos-messaging/logos-messaging-nim.git $(LMN_DIR); \
+	@echo "Checking/Building libwaku ..."
+	@if [ -f "$(HEADER_FILE)" ] && [ -n "$(LIB_FILES)" ]; then \
+		 echo "libwaku artifacts found, skipping build"; \
+	else \
+		 if [ ! -d "$(LMN_DIR)" ]; then \
+		   echo "No nwaku sources at $(LMN_DIR); cloning shallow copy"; \
+		   mkdir -p $(dir $(LMN_DIR)); \
+		   git clone --depth 1 https://github.com/logos-messaging/logos-messaging-nim.git $(LMN_DIR); \
+		 fi; \
+		 echo "Compiling libwaku ..."; \
+		 $(MAKE) -C $(LMN_DIR) libwaku; \
 	fi
-	$(MAKE) -C $(LMN_DIR) libwaku
 
 # Clean up generated files
 clean:

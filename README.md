@@ -8,34 +8,28 @@ Go bindings for the Waku library.
 go get -u github.com/logos-messaging/logos-messaging-go-bindings
 ```
 
-## Dependencies
+## Building & Dependencies
 
-This repository doesn't download or build `logos-messaging-nim`. You must provide `libwaku` and its headers.
+`libwaku` (from `logos-messaging-nim`) is required at compile-time. The Makefile gives you two ways to satisfy this:
 
-To do so, you can:
-- Build `libwaku` from https://github.com/logos-messaging/logos-messaging-nim.
-- Point `cgo` to the headers and compiled library when building your project.
+1. **Automatic clone (default)** – if `LMN_DIR` is **unset**, running
+   ```bash
+   make -C waku build
+   ```
+   will clone a shallow copy of `logos-messaging-nim` into `third_party/nwaku`, build `libwaku`, and compile the Go bindings. This is what CI uses.
 
-Example environment setup (adjust paths to your logos-messaging-nim checkout):
-```
-export LMN_DIR=/path/to/logos-messaging-nim
-export CGO_CFLAGS="-I${LMN_DIR}/library"
-export CGO_LDFLAGS="-L${LMN_DIR}/build -lwaku -Wl,-rpath,${LMN_DIR}/build"
-```
+2. **Reuse an existing clone** – if you already have `logos-messaging-nim` checked out, point the build to it:
+   ```bash
+   export LMN_DIR=/path/to/your/logos-messaging-nim
+   make -C waku build
+   ```
+   Existing `libwaku` artifacts under that path are reused, so this is fast for local development.
 
-Such setup would look like this in a `Makefile`:
-```Makefile
-LMN_DIR ?= /path/to/logos-messaging-nim
-CGO_CFLAGS = -I$(LMN_DIR)/library
-CGO_LDFLAGS = -L$(LMN_DIR)/build -lwaku -Wl,-rpath,$(LMN_DIR)/build
+The Makefile sets `CGO_CFLAGS` and `CGO_LDFLAGS` automatically; no extra environment is required.
 
-build: ## Your project build command
-	go build ./...
-```
+> **Downstream projects**: When importing `logos-messaging-go-bindings` in another Go module you must ensure `LMN_DIR` is exported (or vendor `libwaku`) before running `go build`. Otherwise the CGO step will fail.
 
-For a reference integration, see how `status-go` wires `CGO_CFLAGS` and `CGO_LDFLAGS` in its build setup.
-
-NOTE: If your project is itself used as a Go dependency, all its clients will have to follow the same logos-messaging-nim setup. 
+---
 
 ## Development
 
