@@ -1,7 +1,7 @@
 # Makefile for Waku Go Bindings
 
 # Path to logos-messaging-nim (nwaku) submodule
-LMN_DIR ?= $(shell pwd)/../vendor/logos-messaging-nim/
+LMN_DIR ?= $(shell pwd)/../vendor/logos-messaging-nim
 
 # Default paths for libwaku library and headers (can be overridden)
 LIBWAKU_HEADER_PATH ?= $(LMN_DIR)/library
@@ -14,7 +14,7 @@ export CGO_LDFLAGS := -L$(LIBWAKU_LIB_PATH)/ -lwaku -Wl,-rpath,$(LIBWAKU_LIB_PAT
 HEADER_FILE := $(LIBWAKU_HEADER_PATH)/libwaku.h
 LIB_FILES   := $(wildcard $(LIBWAKU_LIB_PATH)/libwaku.*)
 
-.PHONY: all clean prepare build build-auto build-manual test-auto test-manual build-libwaku
+.PHONY: all clean prepare build test build-auto test-auto build-libwaku
 
 # Validate necessary folders and files
 check-folders:
@@ -58,21 +58,30 @@ build-libwaku:
 		 $(MAKE) -C $(LMN_DIR) libwaku; \
 	fi
 
+build: build-libwaku check-folders
+	@echo "Building Waku Go Bindings (manual)..."
+	go build ./waku
+
+test: build
+	@echo "Running tests (manual)..."
+	@if [ -z "$(TEST)" ]; then \
+		go test ./waku; \
+	else \
+		go test ./waku -count=1 -run $(TEST) -v; \
+	fi
+
 build-auto: build-libwaku check-folders
 	@echo "Building Waku Go Bindings (auto)..."
 	go build ./
 
-build-manual: build-libwaku check-folders
-	@echo "Building Waku Go Bindings (manual)..."
-	go build ./waku
-
 test-auto: build-auto
 	@echo "Running tests (auto)..."
-	go test ./
+	@if [ -z "$(TEST)" ]; then \
+		go test ./...; \
+	else \
+		go test ./ -count=1 -run $(TEST) -v; \
+	fi
 
-test-manual: build-manual
-	@echo "Running tests (manual)..."
-	go test ./waku
 
 # Clean up generated files
 clean:
