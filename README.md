@@ -17,14 +17,17 @@ go get -u github.com/logos-messaging/logos-messaging-go-bindings
    If you want to invoke `go build` or `go test` directly, export the same variables the Makefile sets:
    ```bash
    # path to your existing logos-messaging-nim clone
-   export LMN_DIR=/path/to/logos-messaging-nim
-   export CGO_CFLAGS="-I${LMN_DIR}/library/"
-   export CGO_LDFLAGS="-L${LMN_DIR}/build/ -lwaku -Wl,-rpath,${LMN_DIR}/build/"
+   export LMN_DIR=/absolute/path/to/logos-messaging-nim
+   export CGO_CFLAGS="-I${LMN_DIR}/library"
+   export CGO_LDFLAGS="-L${LMN_DIR}/build -lwaku -Wl,-rpath,${LMN_DIR}/build"
  
    # compile all packages
-   go build ./...
+   go build ./waku
 
-   # run a specific test (no cache)
+   # run all tests
+   go test ./waku
+
+   # run a specific test
    go test ./waku -count=1 -run TestConnectedPeersInfo -v
    ```
 

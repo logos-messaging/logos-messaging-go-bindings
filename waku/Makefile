@@ -50,7 +50,7 @@ check-folders:
 # Build SDS Go Bindings
 build: build-libwaku
 	@echo "Building Waku Go Bindings..."
-	go build ./...
+	go build ./waku
 
 # Build libwaku from the nwaku submodule
 # Build libwaku once (clone if needed). Skips work when headers & libs already exist.
