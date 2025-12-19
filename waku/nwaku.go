@@ -1,6 +1,9 @@
 package waku
 
 /*
+#cgo CFLAGS:  -I${SRCDIR}/../vendor/nwaku/library
+#cgo LDFLAGS: -L${SRCDIR}/../vendor/nwaku/build -lwaku -Wl,-rpath,${SRCDIR}/../vendor/nwaku/build
+
 	#include <libwaku.h>
 	#include <stdio.h>
 	#include <stdlib.h>

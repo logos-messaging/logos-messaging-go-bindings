@@ -1,7 +1,7 @@
 # Makefile for Waku Go Bindings
 
 # Path to logos-messaging-nim (nwaku) submodule
-LMN_DIR ?= $(shell pwd)/../third_party/nwaku
+LMN_DIR ?= $(shell pwd)/../vendor/logos-messaging-nim/
 
 # Default paths for libwaku library and headers (can be overridden)
 LIBWAKU_HEADER_PATH ?= $(LMN_DIR)/library
@@ -14,10 +14,7 @@ export CGO_LDFLAGS := -L$(LIBWAKU_LIB_PATH)/ -lwaku -Wl,-rpath,$(LIBWAKU_LIB_PAT
 HEADER_FILE := $(LIBWAKU_HEADER_PATH)/libwaku.h
 LIB_FILES   := $(wildcard $(LIBWAKU_LIB_PATH)/libwaku.*)
 
-.PHONY: all clean prepare build build-libwaku
-
-# Default target
-all: build
+.PHONY: all clean prepare build build-auto build-manual test-auto test-manual build-libwaku
 
 # Validate necessary folders and files
 check-folders:
@@ -47,13 +44,6 @@ check-folders:
 		echo "ERROR: No libwaku library file found in: $(LIBWAKU_LIB_PATH)"; exit 1; \
 	fi
 
-# Build SDS Go Bindings
-build: build-libwaku
-	@echo "Building Waku Go Bindings..."
-	go build ./waku
-
-# Build libwaku from the nwaku submodule
-# Build libwaku once (clone if needed). Skips work when headers & libs already exist.
 build-libwaku:
 	@echo "Checking/Building libwaku ..."
 	@if [ -f "$(HEADER_FILE)" ] && [ -n "$(LIB_FILES)" ]; then \
@@ -67,6 +57,22 @@ build-libwaku:
 		 echo "Compiling libwaku ..."; \
 		 $(MAKE) -C $(LMN_DIR) libwaku; \
 	fi
+
+build-auto: build-libwaku check-folders
+	@echo "Building Waku Go Bindings (auto)..."
+	go build ./
+
+build-manual: build-libwaku check-folders
+	@echo "Building Waku Go Bindings (manual)..."
+	go build ./waku
+
+test-auto: build-auto
+	@echo "Running tests (auto)..."
+	go test ./
+
+test-manual: build-manual
+	@echo "Running tests (manual)..."
+	go test ./waku
 
 # Clean up generated files
 clean:
