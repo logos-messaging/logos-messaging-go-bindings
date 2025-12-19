@@ -11,7 +11,8 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
-          submodules: true
+          submodules: 'recursive'
+          fetch-depth: 0
 
       - name: Initialize & update submodules
         run: git submodule update --init --recursive
@@ -64,7 +65,8 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
-          submodules: true
+          submodules: 'recursive'
+          fetch-depth: 0
 
       - name: Initialize & update submodules
         run: git submodule update --init --recursive

@@ -1,11 +1,11 @@
 # Makefile for Waku Go Bindings
 
 # Path to logos-messaging-nim (nwaku) submodule
-NWAKU_DIR ?= $(shell pwd)/../third_party/nwaku
+LMN_DIR ?= $(shell pwd)/../third_party/nwaku
 
 # Default paths for libwaku library and headers (can be overridden)
-LIBWAKU_HEADER_PATH ?= $(NWAKU_DIR)/library
-LIBWAKU_LIB_PATH ?= $(NWAKU_DIR)/build
+LIBWAKU_HEADER_PATH ?= $(LMN_DIR)/library
+LIBWAKU_LIB_PATH ?= $(LMN_DIR)/build
 
 export CGO_CFLAGS := -I$(LIBWAKU_HEADER_PATH)/
 export CGO_LDFLAGS := -L$(LIBWAKU_LIB_PATH)/ -lwaku -Wl,-rpath,$(LIBWAKU_LIB_PATH)/
@@ -48,19 +48,19 @@ check-folders:
 	fi
 
 # Build SDS Go Bindings
-build: check-folders
+build: build-libwaku check-folders
 	@echo "Building Waku Go Bindings..."
 	go build ./...
 
 # Build libwaku from the nwaku submodule
 build-libwaku:
-	@echo "Building libwaku from nwaku submodule..."
-	@if [ ! -d "$(NWAKU_DIR)" ]; then \
-		echo "ERROR: nwaku submodule not found at $(NWAKU_DIR)"; \
-		echo "Run 'git submodule update --init --recursive' first"; \
-		exit 1; \
+	@echo "Building libwaku from logos-messaging-nim submodule..."
+	@if [ ! -d "$(LMN_DIR)" ]; then \
+		echo "nwaku sources not found at $(LMN_DIR), cloning shallow copy..."; \
+		mkdir -p $(dir $(LMN_DIR)); \
+		git clone --depth 1 https://github.com/logos-messaging/logos-messaging-nim.git $(LMN_DIR); \
 	fi
-	$(MAKE) -C $(NWAKU_DIR) libwaku
+	$(MAKE) -C $(LMN_DIR) libwaku
 
 # Clean up generated files
 clean:
