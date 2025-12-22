@@ -44,21 +44,7 @@ check-folders:
 		echo "ERROR: No libwaku library file found in: $(LIBWAKU_LIB_PATH)"; exit 1; \
 	fi
 
-build-libwaku:
-	@echo "Checking/Building libwaku ..."
-	@if [ -f "$(HEADER_FILE)" ] && [ -n "$(LIB_FILES)" ]; then \
-		 echo "libwaku artifacts found, skipping build"; \
-	else \
-		 if [ ! -d "$(LMN_DIR)" ]; then \
-		   echo "No nwaku sources at $(LMN_DIR); cloning shallow copy"; \
-		   mkdir -p $(dir $(LMN_DIR)); \
-		   git clone --depth 1 https://github.com/logos-messaging/logos-messaging-nim.git $(LMN_DIR); \
-		 fi; \
-		 echo "Compiling libwaku ..."; \
-		 $(MAKE) -C $(LMN_DIR) libwaku; \
-	fi
-
-build: build-libwaku check-folders
+build: check-folders
 	@echo "Building Waku Go Bindings (manual)..."
 	go build .
 
@@ -69,19 +55,6 @@ test: build
 	else \
 		go test . -count=1 -run $(TEST) -v; \
 	fi
-
-build-auto: build-libwaku check-folders
-	@echo "Building Waku Go Bindings (auto)..."
-	go build ./
-
-test-auto: build-auto
-	@echo "Running tests (auto)..."
-	@if [ -z "$(TEST)" ]; then \
-		go test ./...; \
-	else \
-		go test ./ -count=1 -run $(TEST) -v; \
-	fi
-
 
 # Clean up generated files
 clean:

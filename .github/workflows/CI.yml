@@ -42,12 +42,6 @@ jobs:
           fi
           echo "libwaku artifacts verified successfully"
 
-      - name: Set environment variables for libwaku
-        run: |
-          export LMN_DIR=${{ github.workspace }}/vendor/logos-messaging-nim
-          export CGO_CFLAGS="-I${LMN_DIR}/library"
-          export CGO_LDFLAGS="-L${LMN_DIR}/build -lwaku -Wl,-rpath,${LMN_DIR}/build"
-
       - name: Install Go dependencies
         run: |
           go mod download
@@ -55,6 +49,13 @@ jobs:
 
       - name: Build waku bindings
         run: |
+          export LMN_DIR=${{ github.workspace }}/vendor/logos-messaging-nim
+          export CGO_CFLAGS="-I${LMN_DIR}/library"
+          export CGO_LDFLAGS="-L${LMN_DIR}/build -lwaku -Wl,-rpath,${LMN_DIR}/build"
+          echo "Verifying environment variables:"
+          echo "LMN_DIR=${LMN_DIR}"
+          echo "CGO_CFLAGS=${CGO_CFLAGS}"
+          echo "CGO_LDFLAGS=${CGO_LDFLAGS}"
           make -C waku build
 
       - name: Increase ulimit
