@@ -32,8 +32,8 @@ jobs:
       - name: Install Go dependencies
         run: go mod download
 
-      - name: Build libwaku from submodule
-        run: make -C waku build-libwaku
+      - name: Vendor Go dependencies
+        run: go mod vendor
 
       - name: Build waku bindings
         run: make -C waku build
@@ -41,13 +41,12 @@ jobs:
       - name: Increase ulimit
         run: sudo sh -c "ulimit -n 8192"  
 
-      - name: Run Daily Test
+      - name: Run daily test
         run: |
           set -euo pipefail
-          go test -count=10 -p=1 -v -timeout=360m ./waku \
-            | tee testlogs.log
+          go test -count=10 -p=1 -v -timeout=360m ./ | tee testlogs.log
 
-      - name: Upload Test Logs
+      - name: Upload daily test logs
         uses: actions/upload-artifact@v4
         with:
           name: daily-logs
