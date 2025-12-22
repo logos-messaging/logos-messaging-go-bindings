@@ -44,7 +44,7 @@ check-folders:
 		echo "ERROR: No libwaku library file found in: $(LIBWAKU_LIB_PATH)"; exit 1; \
 	fi
 
-build: check-folders
+build:
 	@echo "Building Waku Go Bindings (manual)..."
 	go build .
 
