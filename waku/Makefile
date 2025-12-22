@@ -52,14 +52,14 @@ check-folders:
 
 build:
 	@echo "Building Waku Go Bindings (manual)..."
-	go build -o waku-bindings .
+	CGO_CFLAGS="$(CGO_CFLAGS)" CGO_LDFLAGS="$(CGO_LDFLAGS)" go build -o waku-bindings .
 
 test: build
 	@echo "Running tests (manual)..."
 	@if [ -z "$(TEST)" ]; then \
-		go test .; \
+		CGO_CFLAGS="$(CGO_CFLAGS)" CGO_LDFLAGS="$(CGO_LDFLAGS)" go test .; \
 	else \
-		go test . -count=1 -run $(TEST) -v; \
+		CGO_CFLAGS="$(CGO_CFLAGS)" CGO_LDFLAGS="$(CGO_LDFLAGS)" go test . -count=1 -run $(TEST) -v; \
 	fi
 
 # Clean up generated files
