@@ -13,37 +13,57 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
-          submodules: true
-
-      - name: Initialize & update submodules
-        run: git submodule update --init --recursive
-
-      - name: Prepare third_party directory
-        run: |
-          sudo mkdir -p third_party
-          sudo chown $USER third_party
+          fetch-depth: 0
 
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: "1.21"
+          go-version: "1.23"
+
+      - name: Clone logos-messaging-nim
+        run: |
+          mkdir -p vendor
+          git clone --depth 1 https://github.com/logos-messaging/logos-messaging-nim.git vendor/logos-messaging-nim
+
+      - name: Build libwaku
+        run: |
+          cd vendor/logos-messaging-nim
+          echo "Building libwaku in $(pwd)"
+          make libwaku -j
+          cd ../..
+
+      - name: Verify paths
+        run: make -C waku print-paths
+
+      - name: Verify libwaku artifacts
+        run: make -C waku check-folders
 
       - name: Install Go dependencies
-        run: go mod download
+        run: |
+          echo "Install Go dependencies $(pwd)"
+          go mod download
+          go mod vendor
 
-      - name: Build nwaku dependencies
-        run: make -C waku
+      - name: Build waku bindings
+        run: |
+          export LMN_DIR=$(pwd)/vendor/logos-messaging-nim
+          export CGO_CFLAGS="-I${LMN_DIR}/library/"
+          export CGO_LDFLAGS="-L${LMN_DIR}/build/ -lwaku -Wl,-rpath,${LMN_DIR}/build/" 
+          make -C waku build
 
       - name: Increase ulimit
-        run: sudo sh -c "ulimit -n 8192"  
+        run: sudo sh -c "ulimit -n 8192"
 
-      - name: Run Daily Test
+      - name: Run daily test
         run: |
           set -euo pipefail
-          go test -count=10 -p=1 -v -timeout=360m ./waku \
-            | tee testlogs.log
+          cd waku
+          export LMN_DIR=$(pwd)/vendor/logos-messaging-nim
+          export CGO_CFLAGS="-I${LMN_DIR}/library/"
+          export CGO_LDFLAGS="-L${LMN_DIR}/build/ -lwaku -Wl,-rpath,${LMN_DIR}/build/"
+          go test -count=10 -p=1 -v -timeout=360m . | tee ../testlogs.log
 
-      - name: Upload Test Logs
+      - name: Upload daily test logs
         uses: actions/upload-artifact@v4
         with:
           name: daily-logs

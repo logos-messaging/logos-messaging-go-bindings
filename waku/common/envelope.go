@@ -3,7 +3,7 @@ package common
 import (
 	"encoding/json"
 
-	"github.com/logos-messaging/logos-messaging-go/waku/v2/protocol/pb"
+	"github.com/logos-messaging/logos-messaging-go-bindings/waku/pb"
 )
 
 // Envelope contains information about the pubsub topic of a WakuMessage

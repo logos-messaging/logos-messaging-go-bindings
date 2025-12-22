@@ -16,8 +16,8 @@ import (
 	"github.com/logos-messaging/logos-messaging-go-bindings/waku/common"
 	ma "github.com/multiformats/go-multiaddr"
 	"github.com/stretchr/testify/require"
-	"github.com/logos-messaging/logos-messaging-go/waku/v2/protocol/pb"
-	"github.com/logos-messaging/logos-messaging-go/waku/v2/protocol/store"
+	"github.com/logos-messaging/logos-messaging-go-bindings/waku/pb"
+	"github.com/logos-messaging/logos-messaging-go-bindings/waku/store"
 )
 
 // In order to run this test, you must run an nwaku node
