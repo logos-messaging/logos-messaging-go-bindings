@@ -32,6 +32,9 @@ jobs:
           make libwaku -j
           cd ../..
 
+      - name: Verify paths
+        run: make -C waku print-paths
+
       - name: Verify libwaku artifacts
         run: make -C waku check-folders
 
@@ -42,9 +45,7 @@ jobs:
           go mod vendor
 
       - name: Build waku bindings
-        run: |
-          echo "Building waku bindings from $(pwd)/waku"
-          make -C waku build
+        run: make -C waku build
 
       - name: Increase ulimit
         run: sudo sh -c "ulimit -n 8192"

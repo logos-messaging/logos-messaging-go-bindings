@@ -1,11 +1,17 @@
 # Makefile for Waku Go Bindings
 
 # Path to logos-messaging-nim (nwaku) submodule
-LMN_DIR ?= $(shell pwd)/../vendor/logos-messaging-nim
+export LMN_DIR ?= $(shell pwd)/../vendor/logos-messaging-nim
+
+# Debugging output
+print-paths:
+	@echo "LMN_DIR: $(LMN_DIR)"
+	@echo "HEADER_PATH: $(LIBWAKU_HEADER_PATH)"
+	@echo "LIB_PATH: $(LIBWAKU_LIB_PATH)"
 
 # Default paths for libwaku library and headers (can be overridden)
-LIBWAKU_HEADER_PATH ?= $(LMN_DIR)/library
-LIBWAKU_LIB_PATH ?= $(LMN_DIR)/build
+export LIBWAKU_HEADER_PATH ?= $(LMN_DIR)/library
+export LIBWAKU_LIB_PATH ?= $(LMN_DIR)/build
 
 export CGO_CFLAGS := -I$(LIBWAKU_HEADER_PATH)/
 export CGO_LDFLAGS := -L$(LIBWAKU_LIB_PATH)/ -lwaku -Wl,-rpath,$(LIBWAKU_LIB_PATH)/
@@ -46,7 +52,7 @@ check-folders:
 
 build:
 	@echo "Building Waku Go Bindings (manual)..."
-	go build .
+	go build -o waku-bindings .
 
 test: build
 	@echo "Running tests (manual)..."
@@ -59,4 +65,4 @@ test: build
 # Clean up generated files
 clean:
 	@echo "Cleaning up..."
-	@rm -f waku-go-bindings
+	@rm -f waku-bindings
