@@ -33,21 +33,7 @@ jobs:
           cd ../..
 
       - name: Verify libwaku artifacts
-        run: |
-          echo "verify libwaku artifacts in $(pwd)"
-          echo "Checking directory structure:"
-          ls -la vendor/logos-messaging-nim/ || true
-          ls -la vendor/logos-messaging-nim/library/ || true
-          ls -la vendor/logos-messaging-nim/build/ || true
-          if [ ! -f "vendor/logos-messaging-nim/library/libwaku.h" ]; then
-            echo "ERROR: libwaku.h not found"
-            exit 1
-          fi
-          if [ ! -f "vendor/logos-messaging-nim/build/libwaku.so" ]; then
-            echo "ERROR: libwaku library not found"
-            exit 1
-          fi
-          echo "libwaku artifacts verified successfully"
+        run: make -C waku check-folders
 
       - name: Install Go dependencies
         run: |
@@ -58,14 +44,7 @@ jobs:
       - name: Build waku bindings
         run: |
           echo "Building waku bindings from $(pwd)/waku"
-          export LMN_DIR=${{ github.workspace }}/vendor/logos-messaging-nim
-          export CGO_CFLAGS="-I${LMN_DIR}/library"
-          export CGO_LDFLAGS="-L${LMN_DIR}/build -lwaku -Wl,-rpath,${LMN_DIR}/build"
-          echo "Verifying environment variables:"
-          echo "LMN_DIR=${LMN_DIR}"
-          echo "CGO_CFLAGS=${CGO_CFLAGS}"
-          echo "CGO_LDFLAGS=${CGO_LDFLAGS}"
-          make -C waku build LMN_DIR=${LMN_DIR} LIBWAKU_HEADER_PATH=${LMN_DIR}/library LIBWAKU_LIB_PATH=${LMN_DIR}/build
+          make -C waku build
 
       - name: Increase ulimit
         run: sudo sh -c "ulimit -n 8192"
