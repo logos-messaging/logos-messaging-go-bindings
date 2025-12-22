@@ -10,39 +10,27 @@ go get -u github.com/logos-messaging/logos-messaging-go-bindings
 
 ## Building & Dependencies
 
-`libwaku` (from `logos-messaging-nim`) is required at compile-time. The Makefile gives you two ways to satisfy this:
+`libwaku` (from `logos-messaging-nim`) is required at compile-time.
 
-1. **Reuse an existing clone** – if you already have `logos-messaging-nim` checked out, point the build to it:
-   ### Manual build without Makefile
-   If you want to invoke `go build` or `go test` directly, export the same variables the Makefile sets:
-   ```bash
-   # path to your existing logos-messaging-nim clone
-   export LMN_DIR=/absolute/path/to/logos-messaging-nim
-   export CGO_CFLAGS="-I${LMN_DIR}/library"
-   export CGO_LDFLAGS="-L${LMN_DIR}/build -lwaku -Wl,-rpath,${LMN_DIR}/build"
- 
-   # compile all packages
-   make -C waku build
+### Building with Makefile
 
-   # run all tests
-   make -C waku test
+If you have `logos-messaging-nim` checked out, point the build to it:
 
-   # run a specific test
-   make -C waku test TEST=TestConnectedPeersInfo
-   ```
+```bash
+# path to your existing logos-messaging-nim clone
+export LMN_DIR=/absolute/path/to/logos-messaging-nim
+export CGO_CFLAGS="-I${LMN_DIR}/library"
+export CGO_LDFLAGS="-L${LMN_DIR}/build -lwaku -Wl,-rpath,${LMN_DIR}/build"
 
-2. **Automatic clone (default)** – if `LMN_DIR` is **unset**, running
-   ```bash
-   make -C waku build-auto
-   make -C waku test-auto
-   make -C waku test-auto TEST=TestConnectedPeersInfo
-   ```
+# compile all packages
+make -C waku build
 
-   will clone a shallow copy of `logos-messaging-nim` into `third_party/nwaku`, build `libwaku`, and compile the Go bindings. This is what CI uses.
+# run all tests
+make -C waku test
 
-> **Downstream projects**: When importing `logos-messaging-go-bindings` in another Go module you must ensure `LMN_DIR` is exported (or vendor `libwaku`) before running `go build`. Otherwise the CGO step will fail.
-
----
+# run a specific test
+make -C waku test TEST=TestConnectedPeersInfo
+```
 
 ## Development
 
