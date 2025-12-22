@@ -36,7 +36,7 @@ jobs:
             echo "ERROR: libwaku.h not found"
             exit 1
           fi
-          if [ ! -f "vendor/logos-messaging-nim/build/libwaku.so" ] && [ ! -f "vendor/logos-messaging-nim/build/libwaku.dylib" ] && [ ! -f "vendor/logos-messaging-nim/build/libwaku.a" ]; then
+          if [ ! -f "vendor/logos-messaging-nim/build/libwaku.so" ]; then
             echo "ERROR: libwaku library not found"
             exit 1
           fi
