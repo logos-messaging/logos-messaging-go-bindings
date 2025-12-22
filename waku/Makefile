@@ -60,14 +60,14 @@ build-libwaku:
 
 build: build-libwaku check-folders
 	@echo "Building Waku Go Bindings (manual)..."
-	go build ./waku
+	go build .
 
 test: build
 	@echo "Running tests (manual)..."
 	@if [ -z "$(TEST)" ]; then \
-		go test ./waku; \
+		go test .; \
 	else \
-		go test ./waku -count=1 -run $(TEST) -v; \
+		go test . -count=1 -run $(TEST) -v; \
 	fi
 
 build-auto: build-libwaku check-folders
