@@ -56,7 +56,7 @@ jobs:
           echo "LMN_DIR=${LMN_DIR}"
           echo "CGO_CFLAGS=${CGO_CFLAGS}"
           echo "CGO_LDFLAGS=${CGO_LDFLAGS}"
-          make -C waku build
+          make -C waku build LMN_DIR=${LMN_DIR}
 
       - name: Increase ulimit
         run: sudo sh -c "ulimit -n 8192"
