@@ -13,38 +13,58 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
-          submodules: 'recursive'
           fetch-depth: 0
-
-      - name: Initialize & update submodules
-        run: git submodule update --init --recursive
-
-      - name: Prepare third_party directory
-        run: |
-          sudo mkdir -p third_party
-          sudo chown $USER third_party
 
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
           go-version: "1.23"
 
-      - name: Install Go dependencies
-        run: go mod download
+      - name: Clone logos-messaging-nim
+        run: |
+          mkdir -p vendor
+          git clone --depth 1 https://github.com/logos-messaging/logos-messaging-nim.git vendor/logos-messaging-nim
 
-      - name: Vendor Go dependencies
-        run: go mod vendor
+      - name: Build libwaku
+        run: |
+          cd vendor/logos-messaging-nim
+          make libwaku -j
+
+      - name: Verify libwaku artifacts
+        run: |
+          if [ ! -f "vendor/logos-messaging-nim/library/libwaku.h" ]; then
+            echo "ERROR: libwaku.h not found"
+            exit 1
+          fi
+          if [ ! -f "vendor/logos-messaging-nim/build/libwaku.so" ] && [ ! -f "vendor/logos-messaging-nim/build/libwaku.dylib" ] && [ ! -f "vendor/logos-messaging-nim/build/libwaku.a" ]; then
+            echo "ERROR: libwaku library not found"
+            exit 1
+          fi
+          echo "libwaku artifacts verified successfully"
+
+      - name: Set environment variables for libwaku
+        run: |
+          export LMN_DIR=${{ github.workspace }}/vendor/logos-messaging-nim
+          export CGO_CFLAGS="-I${LMN_DIR}/library"
+          export CGO_LDFLAGS="-L${LMN_DIR}/build -lwaku -Wl,-rpath,${LMN_DIR}/build"
+
+      - name: Install Go dependencies
+        run: |
+          go mod download
+          go mod vendor
 
       - name: Build waku bindings
-        run: make -C waku build
+        run: |
+          make -C waku build
 
       - name: Increase ulimit
-        run: sudo sh -c "ulimit -n 8192"  
+        run: sudo sh -c "ulimit -n 8192"
 
       - name: Run daily test
         run: |
           set -euo pipefail
-          go test -count=10 -p=1 -v -timeout=360m ./ | tee testlogs.log
+          cd waku
+          go test -count=10 -p=1 -v -timeout=360m . | tee ../testlogs.log
 
       - name: Upload daily test logs
         uses: actions/upload-artifact@v4

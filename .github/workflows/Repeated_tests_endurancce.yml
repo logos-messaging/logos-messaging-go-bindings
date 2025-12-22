@@ -30,8 +30,13 @@ jobs:
       - name: Install Go dependencies
         run: go mod download
 
-      - name: Build libwaku from submodule
-        run: make -C waku build-libwaku
+      - name: Vendor Go dependencies
+        run: go mod vendor
+
+      - name: Build libwaku
+        run: |
+          cd vendor/logos-messaging-nim
+          make libwaku
 
       - name: Build waku bindings
         run: make -C waku build
