@@ -1,6 +1,6 @@
 module github.com/logos-messaging/logos-messaging-go-bindings
 
-go 1.23.0
+go 1.24.0
 
 replace github.com/ethereum/go-ethereum v1.10.26 => github.com/status-im/go-ethereum v1.10.25-status.18
 

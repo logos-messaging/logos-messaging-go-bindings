@@ -1,8 +1,6 @@
 package utils
 
 import (
-	"fmt"
-	"os"
 	"runtime"
 
 	"github.com/libp2p/go-libp2p/core/peer"
@@ -10,27 +8,9 @@ import (
 )
 
 func GetRSSKB() (uint64, error) {
-	var m runtime.MemStats
-	runtime.ReadMemStats(&m)
-	
-	if runtime.GOOS == "linux" {
-		data, err := os.ReadFile("/proc/self/status")
-		if err != nil {
-			return 0, err
-		}
-		
-		var rss uint64
-		for _, line := range []byte(string(data)) {
-			if line == 0 {
-				break
-			}
-		}
-		if _, err := fmt.Sscanf(string(data), "VmRSS: %d kB", &rss); err == nil {
-			return rss, nil
-		}
-	}
-	
-	return m.Sys / 1024, nil
+    var m runtime.MemStats
+    runtime.ReadMemStats(&m)
+    return m.Sys / 1024, nil
 }
 
 func EncapsulatePeerID(p peer.ID, addrs ...multiaddr.Multiaddr) []multiaddr.Multiaddr {

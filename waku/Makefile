@@ -51,7 +51,7 @@ check-folders:
 	fi
 
 build:
-	@echo "Building Waku Go Bindings (manual)..."
+	@echo "Building Logos Messaging Go Bindings (manual)..."
 	CGO_CFLAGS="$(CGO_CFLAGS)" CGO_LDFLAGS="$(CGO_LDFLAGS)" go build -o waku-bindings .
 
 test: build
