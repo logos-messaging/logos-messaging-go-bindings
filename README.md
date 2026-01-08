@@ -8,34 +8,29 @@ Go bindings for the Waku library.
 go get -u github.com/logos-messaging/logos-messaging-go-bindings
 ```
 
-## Dependencies
+## Building & Dependencies
 
-This repository doesn't download or build `logos-messaging-nim`. You must provide `libwaku` and its headers.
+`libwaku` (from `logos-messaging-nim`) is required at compile-time.
 
-To do so, you can:
-- Build `libwaku` from https://github.com/logos-messaging/logos-messaging-nim.
-- Point `cgo` to the headers and compiled library when building your project.
+### Building with Makefile
 
-Example environment setup (adjust paths to your logos-messaging-nim checkout):
-```
-export LMN_DIR=/path/to/logos-messaging-nim
+If you have `logos-messaging-nim` checked out, point the build to it:
+
+```bash
+# path to your existing logos-messaging-nim clone
+export LMN_DIR=/absolute/path/to/logos-messaging-nim
 export CGO_CFLAGS="-I${LMN_DIR}/library"
 export CGO_LDFLAGS="-L${LMN_DIR}/build -lwaku -Wl,-rpath,${LMN_DIR}/build"
+
+# compile all packages
+make -C waku build
+
+# run all tests
+make -C waku test
+
+# run a specific test
+make -C waku test TEST=TestConnectedPeersInfo
 ```
-
-Such setup would look like this in a `Makefile`:
-```Makefile
-LMN_DIR ?= /path/to/logos-messaging-nim
-CGO_CFLAGS = -I$(LMN_DIR)/library
-CGO_LDFLAGS = -L$(LMN_DIR)/build -lwaku -Wl,-rpath,$(LMN_DIR)/build
-
-build: ## Your project build command
-	go build ./...
-```
-
-For a reference integration, see how `status-go` wires `CGO_CFLAGS` and `CGO_LDFLAGS` in its build setup.
-
-NOTE: If your project is itself used as a Go dependency, all its clients will have to follow the same logos-messaging-nim setup. 
 
 ## Development
 

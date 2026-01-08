@@ -25,13 +25,21 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: "1.21"
+          go-version: "1.24"
 
       - name: Install Go dependencies
         run: go mod download
 
-      - name: Build dependencies
-        run: make -C waku
+      - name: Vendor Go dependencies
+        run: go mod vendor
+
+      - name: Build libwaku
+        run: |
+          cd vendor/logos-messaging-nim
+          make libwaku
+
+      - name: Build waku bindings
+        run: make -C waku build
 
       - name: Clean environment
         run: go clean -cache

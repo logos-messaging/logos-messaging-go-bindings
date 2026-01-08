@@ -1,18 +1,26 @@
 # Makefile for Waku Go Bindings
 
-# The LIBWAKU_LIB_PATH and LIBWAKU_HEADER_PATH env vars should be defined beforehand
-# Therefore, we assume the libwaku library and headers are located in the specified paths
-export CGO_CFLAGS="-I${LIBWAKU_HEADER_PATH}/"
-export CGO_LDFLAGS="-L${LIBWAKU_LIB_PATH}/ -lsds -Wl,-rpath,${LIBWAKU_LIB_PATH}/"
+# Path to logos-messaging-nim (nwaku) submodule
+export LMN_DIR ?= $(shell pwd)/../vendor/logos-messaging-nim
+
+# Debugging output
+print-paths:
+	@echo "LMN_DIR: $(LMN_DIR)"
+	@echo "HEADER_PATH: $(LIBWAKU_HEADER_PATH)"
+	@echo "LIB_PATH: $(LIBWAKU_LIB_PATH)"
+
+# Default paths for libwaku library and headers (can be overridden)
+export LIBWAKU_HEADER_PATH ?= $(LMN_DIR)/library
+export LIBWAKU_LIB_PATH ?= $(LMN_DIR)/build
+
+export CGO_CFLAGS := -I$(LIBWAKU_HEADER_PATH)/
+export CGO_LDFLAGS := -L$(LIBWAKU_LIB_PATH)/ -lwaku -Wl,-rpath,$(LIBWAKU_LIB_PATH)/
 
 # Expected files
 HEADER_FILE := $(LIBWAKU_HEADER_PATH)/libwaku.h
 LIB_FILES   := $(wildcard $(LIBWAKU_LIB_PATH)/libwaku.*)
 
-.PHONY: all clean prepare build
-
-# Default target
-all: build
+.PHONY: all clean prepare build test build-auto test-auto build-libwaku
 
 # Validate necessary folders and files
 check-folders:
@@ -42,12 +50,19 @@ check-folders:
 		echo "ERROR: No libwaku library file found in: $(LIBWAKU_LIB_PATH)"; exit 1; \
 	fi
 
-# Build SDS Go Bindings
-build: check-folders
-	@echo "Building Waku Go Bindings..."
-	go build ./...
+build:
+	@echo "Building Logos Messaging Go Bindings (manual)..."
+	CGO_CFLAGS="$(CGO_CFLAGS)" CGO_LDFLAGS="$(CGO_LDFLAGS)" go build -o waku-bindings .
+
+test: build
+	@echo "Running tests (manual)..."
+	@if [ -z "$(TEST)" ]; then \
+		CGO_CFLAGS="$(CGO_CFLAGS)" CGO_LDFLAGS="$(CGO_LDFLAGS)" go test .; \
+	else \
+		CGO_CFLAGS="$(CGO_CFLAGS)" CGO_LDFLAGS="$(CGO_LDFLAGS)" go test . -count=1 -run $(TEST) -v; \
+	fi
 
 # Clean up generated files
 clean:
 	@echo "Cleaning up..."
-	@rm -f waku-go-bindings
+	@rm -f waku-bindings
