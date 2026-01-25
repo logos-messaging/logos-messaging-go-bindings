@@ -9,7 +9,6 @@ import (
 	"github.com/cenkalti/backoff/v3"
 	"github.com/logos-messaging/logos-messaging-go-bindings/waku/common"
 	"github.com/stretchr/testify/require"
-	"github.com/logos-messaging/logos-messaging-go-bindings/waku/pb"
 	"google.golang.org/protobuf/proto"
 )
 

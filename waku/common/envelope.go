@@ -2,15 +2,13 @@ package common
 
 import (
 	"encoding/json"
-
-	"github.com/logos-messaging/logos-messaging-go-bindings/waku/pb"
 )
 
 // Envelope contains information about the pubsub topic of a WakuMessage
 // and a hash used to identify a message based on the bytes of a WakuMessage
 // protobuffer
 type Envelope struct {
-	msg   *pb.WakuMessage
+	msg   *WakuMessage
 	topic string
 	hash  MessageHash
 }
@@ -39,7 +37,7 @@ func (e *Envelope) UnmarshalJSON(input []byte) error {
 		return err
 	}
 
-	e.msg = &pb.WakuMessage{
+	e.msg = &WakuMessage{
 		Payload:        wakuEnvelope.WakuMessage.Payload,
 		ContentTopic:   wakuEnvelope.WakuMessage.ContentTopic,
 		Version:        wakuEnvelope.WakuMessage.Version,
@@ -54,7 +52,7 @@ func (e *Envelope) UnmarshalJSON(input []byte) error {
 	return nil
 }
 
-func (e *Envelope) Message() *pb.WakuMessage {
+func (e *Envelope) Message() *WakuMessage {
 	return e.msg
 }
 

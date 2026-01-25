@@ -359,7 +359,6 @@ import (
 	"github.com/libp2p/go-libp2p/core/peer"
 	libp2pproto "github.com/libp2p/go-libp2p/core/protocol"
 	"github.com/multiformats/go-multiaddr"
-	"github.com/logos-messaging/logos-messaging-go-bindings/waku/pb"
 	"github.com/logos-messaging/logos-messaging-go-bindings/waku/utils"
 
 	"github.com/logos-messaging/logos-messaging-go-bindings/waku/common"

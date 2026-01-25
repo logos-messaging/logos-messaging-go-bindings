@@ -6,10 +6,8 @@ import (
 	"time"
 
 	"github.com/cenkalti/backoff/v3"
-	"github.com/stretchr/testify/require"
-	"github.com/logos-messaging/logos-messaging-go-bindings/waku/pb"
-
 	"github.com/logos-messaging/logos-messaging-go-bindings/waku/common"
+	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -57,7 +55,7 @@ func TestStoreQuery3Nodes(t *testing.T) {
 	err = WaitForAutoConnection([]*WakuNode{node1, node2, node3})
 	require.NoError(t, err, "Nodes did not connect within timeout")
 	Debug("Publishing message from Node1 using RelayPublish")
-	message := node1.CreateMessage(&pb.WakuMessage{
+	message := node1.CreateMessage(&WakuMessage{
 		Payload:      []byte("test-message"),
 		ContentTopic: "test-content-topic",
 		Timestamp:    proto.Int64(time.Now().UnixNano()),
@@ -136,7 +134,7 @@ func TestStoreQueryMultipleMessages(t *testing.T) {
 
 	Debug("Publishing %d messages from Node1 using RelayPublish", numMessages)
 	for i := 0; i < numMessages; i++ {
-		message := node1.CreateMessage(&pb.WakuMessage{
+		message := node1.CreateMessage(&WakuMessage{
 			Payload:      []byte(fmt.Sprintf("message-%d", i)),
 			ContentTopic: "test-content-topic",
 			Timestamp:    proto.Int64(time.Now().UnixNano()),
@@ -226,7 +224,7 @@ func TestStoreQueryWith5Pagination(t *testing.T) {
 
 	Debug("Publishing %d messages from Node1 using RelayPublish", numMessages)
 	for i := 0; i < numMessages; i++ {
-		message := node1.CreateMessage(&pb.WakuMessage{
+		message := node1.CreateMessage(&WakuMessage{
 			Payload:      []byte(fmt.Sprintf("message-%d", i)),
 			ContentTopic: "test-content-topic",
 			Timestamp:    proto.Int64(time.Now().UnixNano()),
@@ -308,7 +306,7 @@ func TestStoreQueryWithPaginationMultiplePages(t *testing.T) {
 
 	Debug("Publishing %d messages from Node1 using RelayPublish", numMessages)
 	for i := 0; i < numMessages; i++ {
-		message := node1.CreateMessage(&pb.WakuMessage{
+		message := node1.CreateMessage(&WakuMessage{
 			Payload:      []byte(fmt.Sprintf("message-%d", i)),
 			ContentTopic: "test-content-topic",
 			Timestamp:    proto.Int64(time.Now().UnixNano()),
@@ -416,7 +414,7 @@ func TestStoreQueryWithPaginationReverseOrder(t *testing.T) {
 	queryTimestamp := proto.Int64(time.Now().UnixNano())
 	Debug("Publishing %d messages from Node1 using RelayPublish", numMessages)
 	for i := 0; i < numMessages; i++ {
-		message := node1.CreateMessage(&pb.WakuMessage{
+		message := node1.CreateMessage(&WakuMessage{
 			Payload:      []byte(fmt.Sprintf("message-%d", i)),
 			ContentTopic: "test-content-topic",
 			Timestamp:    proto.Int64(time.Now().UnixNano()),

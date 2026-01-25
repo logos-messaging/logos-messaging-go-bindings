@@ -7,10 +7,6 @@ import (
 	"sync"
 
 	"github.com/ethereum/go-ethereum/common/hexutil"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
-
-	"github.com/logos-messaging/logos-messaging-go-bindings/waku/pb"
 )
 
 // MessageHash represents an unique identifier for a message within a pubsub topic
@@ -49,27 +45,8 @@ func SHA256(data ...[]byte) []byte {
 	return h.Sum(nil)
 }
 
-// Hash calculates the hash of a waku message
-func (msg *pb.WakuMessage) Hash(pubsubTopic string) MessageHash {
-	hash := SHA256([]byte(pubsubTopic), msg.Payload, []byte(msg.ContentTopic), msg.Meta, toBytes(msg.GetTimestamp()))
-	return ToMessageHash(hash)
-}
-
 func toBytes(i int64) []byte {
 	b := make([]byte, 8)
 	binary.BigEndian.PutUint64(b, uint64(i))
 	return b
-}
-
-func (msg *pb.WakuMessage) LogFields(pubsubTopic string) []zapcore.Field {
-	return []zapcore.Field{
-		zap.Stringer("hash", msg.Hash(pubsubTopic)),
-		zap.String("pubsubTopic", pubsubTopic),
-		zap.String("contentTopic", msg.ContentTopic),
-		zap.Int64("timestamp", msg.GetTimestamp()),
-	}
-}
-
-func (msg *pb.WakuMessage) Logger(logger *zap.Logger, pubsubTopic string) *zap.Logger {
-	return logger.With(msg.LogFields(pubsubTopic)...)
 }
