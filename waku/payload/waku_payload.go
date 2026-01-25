@@ -13,6 +13,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/crypto/ecies"
+	"github.com/logos-messaging/logos-messaging-go-bindings/waku/common"
 )
 
 // KeyKind indicates the type of encryption to apply
@@ -89,7 +90,7 @@ func (payload Payload) Encode(version uint32) ([]byte, error) {
 	return nil, errors.New("unsupported wakumessage version")
 }
 
-func EncodeWakuMessage(message *WakuMessage, keyInfo *KeyInfo) error {
+func EncodeWakuMessage(message *common.WakuMessage, keyInfo *KeyInfo) error {
 	msgPayload := message.Payload
 	payload := Payload{
 		Data: msgPayload,
@@ -107,7 +108,7 @@ func EncodeWakuMessage(message *WakuMessage, keyInfo *KeyInfo) error {
 
 // DecodePayload decodes a WakuMessage depending on the version parameter.
 // 0 for raw unencrypted data, and 1 for using WakuV1 decoding
-func DecodePayload(message *WakuMessage, keyInfo *KeyInfo) (*DecodedPayload, error) {
+func DecodePayload(message *common.WakuMessage, keyInfo *KeyInfo) (*DecodedPayload, error) {
 	switch message.GetVersion() {
 	case uint32(0):
 		return &DecodedPayload{Data: message.Payload}, nil
@@ -152,7 +153,7 @@ func DecodePayload(message *WakuMessage, keyInfo *KeyInfo) (*DecodedPayload, err
 	return nil, errors.New("unsupported wakumessage version")
 }
 
-func DecodeWakuMessage(message *WakuMessage, keyInfo *KeyInfo) error {
+func DecodeWakuMessage(message *common.WakuMessage, keyInfo *KeyInfo) error {
 	decodedPayload, err := DecodePayload(message, keyInfo)
 	if err != nil {
 		return err

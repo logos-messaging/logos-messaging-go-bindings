@@ -358,8 +358,8 @@ import (
 	"github.com/ethereum/go-ethereum/p2p/enode"
 	"github.com/libp2p/go-libp2p/core/peer"
 	libp2pproto "github.com/libp2p/go-libp2p/core/protocol"
-	"github.com/multiformats/go-multiaddr"
 	"github.com/logos-messaging/logos-messaging-go-bindings/waku/utils"
+	"github.com/multiformats/go-multiaddr"
 
 	"github.com/logos-messaging/logos-messaging-go-bindings/waku/common"
 )
@@ -993,12 +993,12 @@ func (n *WakuNode) StoreQuery(ctx context.Context, storeRequest *common.StoreQue
 	return nil, errors.New(errMsg)
 }
 
-func (n *WakuNode) RelayPublish(ctx context.Context, message *pb.WakuMessage, pubsubTopic string) (common.MessageHash, error) {
+func (n *WakuNode) RelayPublish(ctx context.Context, message *common.WakuMessage, pubsubTopic string) (common.MessageHash, error) {
 	timeoutMs := getContextTimeoutMilliseconds(ctx)
 
 	jsonMsg, err := json.Marshal(message)
 	if err != nil {
-		return common.MessageHash(""), err
+		return common.MessageHash([32]byte{}), err
 	}
 
 	wg := sync.WaitGroup{}
@@ -1017,19 +1017,19 @@ func (n *WakuNode) RelayPublish(ctx context.Context, message *pb.WakuMessage, pu
 		msgHash := C.GoStringN(C.getMyCharPtr(resp), C.int(C.getMyCharLen(resp)))
 		parsedMsgHash, err := common.ToMessageHash(msgHash)
 		if err != nil {
-			return common.MessageHash(""), err
+			return common.MessageHash([32]byte{}), err
 		}
 		return parsedMsgHash, nil
 	}
 	errMsg := "WakuRelayPublish: " + C.GoStringN(C.getMyCharPtr(resp), C.int(C.getMyCharLen(resp)))
-	return common.MessageHash(""), errors.New(errMsg)
+	return common.MessageHash([32]byte{}), errors.New(errMsg)
 }
 
-func (n *WakuNode) RelayPublishNoCTX(pubsubTopic string, message *pb.WakuMessage) (common.MessageHash, error) {
+func (n *WakuNode) RelayPublishNoCTX(pubsubTopic string, message *common.WakuMessage) (common.MessageHash, error) {
 	if n == nil {
 		err := errors.New("cannot publish message; node is nil")
 		Error("Failed to publish message via relay: %v", err)
-		return "", err
+		return common.MessageHash([32]byte{}), err
 	}
 
 	// Handling context internally with a timeout
@@ -1041,7 +1041,7 @@ func (n *WakuNode) RelayPublishNoCTX(pubsubTopic string, message *pb.WakuMessage
 	msgHash, err := n.RelayPublish(ctx, message, pubsubTopic)
 	if err != nil {
 		Error("Failed to publish message via relay on node %s: %v", n.nodeName, err)
-		return "", err
+		return common.MessageHash([32]byte{}), err
 	}
 
 	Debug("Successfully published message via relay on node %s, messageHash: %s", n.nodeName, msgHash.String())

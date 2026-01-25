@@ -87,7 +87,7 @@ func RetryWithBackOff(o func() error, options ...BackOffOption) error {
 	return backoff.Retry(o, &b)
 }
 
-func (n *WakuNode) CreateMessage(customMessage ...*pb.WakuMessage) *pb.WakuMessage {
+func (n *WakuNode) CreateMessage(customMessage ...*common.WakuMessage) *common.WakuMessage {
 	Debug("Creating a WakuMessage on node %s", n.nodeName)
 
 	if len(customMessage) > 0 && customMessage[0] != nil {
@@ -96,7 +96,7 @@ func (n *WakuNode) CreateMessage(customMessage ...*pb.WakuMessage) *pb.WakuMessa
 	}
 
 	Debug("Using default message format on node %s", n.nodeName)
-	defaultMessage := &pb.WakuMessage{
+	defaultMessage := &common.WakuMessage{
 		Payload:      []byte("This is a default Waku message payload"),
 		ContentTopic: DefaultContentTopic,
 		Version:      proto.Uint32(0),
@@ -140,7 +140,7 @@ func WaitForAutoConnection(nodeList []*WakuNode) error {
 	return nil
 }
 
-func (n *WakuNode) VerifyMessageReceived(expectedMessage *pb.WakuMessage, expectedHash common.MessageHash, timeout ...time.Duration) error {
+func (n *WakuNode) VerifyMessageReceived(expectedMessage *common.WakuMessage, expectedHash common.MessageHash, timeout ...time.Duration) error {
 
 	var verifyTimeout time.Duration
 	if len(timeout) > 0 {
