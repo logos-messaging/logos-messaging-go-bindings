@@ -1015,7 +1015,7 @@ func (n *WakuNode) RelayPublish(ctx context.Context, message *common.WakuMessage
 	wg.Wait()
 	if C.getRet(resp) == C.RET_OK {
 		msgHash := C.GoStringN(C.getMyCharPtr(resp), C.int(C.getMyCharLen(resp)))
-		parsedMsgHash, err := common.ToMessageHash(msgHash)
+		parsedMsgHash, err := common.ToMessageHashFromStringFormat(msgHash)
 		if err != nil {
 			return common.MessageHash([32]byte{}), err
 		}
